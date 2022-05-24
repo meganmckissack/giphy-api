@@ -1,26 +1,24 @@
 import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './css/styles.css';
-import WeatherService from './weather-service.js';
+import GiphyService from './giphy-service';
 
 
 function clearFields() {
-  $('#location').val("");
+  $('#gif').val("");
   $('.showErrors').text("");
-  $('.showHumidity').text("");
-  $('.showTemp').text("");
 }
 
 $(document).ready(function() {
-  $('#weatherLocation').click(function() {
-    let city = $('#location').val();
+  $('#gifSearch').click(function() {
+    let gif = $('#gif').val();
     clearFields();
-    let promise = WeatherService.getWeather(city);
+    let promise = GiphyService.getGif(gif);
     promise.then(function(response) {
-      const body = JSON.parse(response);
-      $('.showHumidity').text(`The humidity in ${city} is ${body.main.humidity}%`);
-      $('.showTemp').text(`The temperature in Kelvins is ${body.main.temp} degrees.`);
+      const responseData = JSON.parse(response);
+      $('.showGifs').prepend(`<img src=${responseData.data[0].url}>`);
+      // $('.showHumidity').text(`The humidity in ${city} is ${body.main.humidity}%`);
+      // $('.showTemp').text(`The temperature in Kelvins is ${body.main.temp} degrees.`);
     }, function(error) {
       $('.showErrors').text(`There was an error processing your request: ${error}`);
     });
